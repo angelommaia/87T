@@ -46,11 +46,13 @@ pkg load signal #para o resample
       size(arquivo_dat,1));
   
     #plotando dados originais para conferencia 
+      figure(1,"position",[500,500,1000,500]);
       plot(arquivo_dat(:,2)/10e5, arquivo_dat(:,3:5))
       legend(nome_variaveis{1},nome_variaveis{2},nome_variaveis{3}); #print ("-dpdf", 'plot.pdf');
       title (sprintf("Dados Originais do COMTRADE - Alta do Trafo"));
       xlabel('Tempo(s)');ylabel('Corrente(A)');
-      figure();
+
+      figure(2,"position",[500,500,1000,500]);
       plot(arquivo_dat(:,2)/10e5, arquivo_dat(:,6:8))
       legend(nome_variaveis{4},nome_variaveis{5},nome_variaveis{6}); #print ("-dpdf", 'plot.pdf');
       title (sprintf("Dados Originais do COMTRADE - Baixa do Trafo"));
@@ -59,12 +61,12 @@ pkg load signal #para o resample
       
     ##=== interpolação de dados ===#  fonte: https://stackoverflow.com/questions/33137018/resample-function-in-octave
 
-      fs = 1;
-      qde_amostras = (max(arquivo_dat(:,2))-min(arquivo_dat(1,2))*fs);
-##      vet_samp = linspace(min(arquivo_dat(:,2)), max(arquivo_dat(:,2)), qde_amostras);
-##      Yap = interp1(arquivo_dat(:,2),arquivo_dat(:,3:end), vet_samp );
-##      plot(arquivo_dat(:,2),arquivo_dat(:,3:end))
-
+      freq_samp = .1;
+      #qde_amostras = (min(arquivo_dat(:,2)):1/freq_samp:max(arquivo_dat(:,2)))';
+      resamp_qde_amostras = (min(arquivo_dat(:,1)):1/freq_samp:max(arquivo_dat(:,1)))';
+      resamp = interp1(arquivo_dat(:,1), arquivo_dat(:,3), resamp_qde_amostras);
+      figure(3,"position",[500,500,1000,500]);
+       plot(resamp_qde_amostras, resamp);
      ## filttro passa baixa
 ##      n_filtro = 2; 
 ##      freq_corte = 300; 
