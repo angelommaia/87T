@@ -59,8 +59,8 @@ pkg load signal #para o resample
       
     ##=== interpolação de dados ===#  fonte: https://stackoverflow.com/questions/33137018/resample-function-in-octave
 
-##      fs = 1;
-##      qde_amostras = (max(arquivo_dat(:,2))-min(arquivo_dat(1,2))*fs);
+      fs = 1;
+      qde_amostras = (max(arquivo_dat(:,2))-min(arquivo_dat(1,2))*fs);
 ##      vet_samp = linspace(min(arquivo_dat(:,2)), max(arquivo_dat(:,2)), qde_amostras);
 ##      Yap = interp1(arquivo_dat(:,2),arquivo_dat(:,3:end), vet_samp );
 ##      plot(arquivo_dat(:,2),arquivo_dat(:,3:end))
