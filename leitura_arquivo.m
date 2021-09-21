@@ -10,7 +10,7 @@ pkg load signal #para o resample
 #=======LEITURA INICIAL DE DADOS=======#
   
   #leitura arquivo .cfg #Nota: podem ser extraidos mais dados. avaliar
-    nome_arquivo = "baixazero"; #apenas para salvar o nome do arquivo em variavel
+    nome_arquivo = "i_3f_inrush_v2"; #apenas para salvar o nome do arquivo em variavel
     dados_cfg = fopen(strcat(nome_arquivo,".cfg"));
     foo = fgetl(dados_cfg); #para ignorar a linha de titulo, nao sera utilizada
     entradas = strsplit(fgetl(dados_cfg),','); #pegando a segunda linha,
@@ -20,8 +20,8 @@ pkg load signal #para o resample
     # OBS: o comtrade 99 gerado pelo pscad possui espaços antes do inicio dos dados 
   
     qde_entradas=str2double(entradas(1,1))(1) 
-    entradas_analogicas= str2double(char(entradas(1,2)(1))(2))
-    entradas_digitais=str2double(char(entradas(1,3)(1))(2))
+    entradas_analogicas= str2double(char(entradas(1,2)(1))(1))
+    entradas_digitais=str2double(char(entradas(1,3)(1))(1))
    
   #verificacao da quantidade de amostras no arquivo .dat
      for i=1:qde_entradas
@@ -52,12 +52,13 @@ pkg load signal #para o resample
       title (sprintf("Dados Originais do COMTRADE - Alta do Trafo"));
       xlabel('Tempo(s)');ylabel('Corrente(A)');
 
-      figure(2,"position",[500,500,1000,500]);
-      plot(arquivo_dat(:,2)/10e5, arquivo_dat(:,6:8))
-      legend(nome_variaveis{4},nome_variaveis{5},nome_variaveis{6}); #print ("-dpdf", 'plot.pdf');
-      title (sprintf("Dados Originais do COMTRADE - Baixa do Trafo"));
-      xlabel('Tempo(s)');ylabel('Corrente(A)');
-
+      if (size(arquivo_dat,2)>5) #so plota se existir as colunas da baixa      
+        figure(2,"position",[500,500,1000,500]);
+        plot(arquivo_dat(:,2)/10e5, arquivo_dat(:,6:8))
+        legend(nome_variaveis{4},nome_variaveis{5},nome_variaveis{6}); #print ("-dpdf", 'plot.pdf');
+        title (sprintf("Dados Originais do COMTRADE - Baixa do Trafo"));
+        xlabel('Tempo(s)');ylabel('Corrente(A)');
+      endif
      ##===COMPONENTES HARMONICAS===##
   
       sinal_teste = arquivo_dat(:,3);
@@ -69,7 +70,7 @@ pkg load signal #para o resample
       fourier_parametrizada = fourier/max(fourier)*100;
       figure()
       bar((0:length(sinal_teste)-1)*frequencia_de_amostragem/length(sinal_teste), fourier_parametrizada);
-     title("Componentes Harmonicas")
+      title("Componentes Harmonicas")
       xlim([-1 9]);
 
    
