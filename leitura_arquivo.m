@@ -83,19 +83,19 @@ pkg load signal #para o resample
       
       
       resamp_qde_amostras = (min(arquivo_dat(:,1)):1/freq_samp:max(arquivo_dat(:,1)))';
-      resamp = interp1(arquivo_dat(:,1), arquivo_dat(:,3), resamp_qde_amostras);
+      resamp = interp1(arquivo_dat(:,1), arquivo_dat(:,2), resamp_qde_amostras);
       
       arquivo_resamp = zeros(size(resamp,1),size(arquivo_dat,2));
       arquivo_resamp(:,1) = resamp;
       aux=2      
-      for i = 4:size(arquivo_dat,2)     
+      for i = 3:size(arquivo_dat,2)     
         resamp = interp1(arquivo_dat(:,1), arquivo_dat(:,i), resamp_qde_amostras);
         arquivo_resamp (:,aux) = resamp;
         aux=aux+1;
       end
 
       figure(3,"position",[500,500,1000,500]);
-      plot(resamp_qde_amostras, arquivo_resamp);
+      plot(arquivo_resamp(:,1), arquivo_resamp(:,2:5));
       title("Dados Reamostrados Por Interpolação");
             
 
