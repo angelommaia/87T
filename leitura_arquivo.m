@@ -4,6 +4,8 @@
 #                                                                              #
 ################################################################################
 
+#filtragem anti-aliasing, amostragem, fintro dft,  filtro de seq, algoritmo de proteção
+
 clear;home;
 pkg load signal #para o resample 
 
@@ -61,37 +63,37 @@ pkg load signal #para o resample
       endif
      ##===COMPONENTES HARMONICAS===##
   
-      sinal_teste = arquivo_dat(:,3);
-      
-      frequencia_de_amostragem = 1000;
-      Nyquist = frequencia_de_amostragem / 2;
-      
-      fourier = abs(fft(sinal_teste)/length(sinal_teste));
-      fourier_parametrizada = fourier/max(fourier)*100;
-      figure()
-      bar((0:length(sinal_teste)-1)*frequencia_de_amostragem/length(sinal_teste), fourier_parametrizada);
-      title("Componentes Harmonicas")
-      xlim([-1 9]);
+##      sinal_teste = arquivo_dat(:,3);
+##      
+##      frequencia_de_amostragem = 1000;
+##      Nyquist = frequencia_de_amostragem / 2;
+##      
+##      fourier = abs(fft(sinal_teste)/length(sinal_teste));
+##      fourier_parametrizada = fourier/max(fourier)*100;
+##      figure()
+##      bar((0:length(sinal_teste)-1)*frequencia_de_amostragem/length(sinal_teste), fourier_parametrizada);
+##      title("Componentes Harmonicas")
+##      xlim([-1 9]);
 
    
-    ##=== interpolação de dados ===#  fonte: https://stackoverflow.com/questions/33137018/resample-function-in-octave
+ ##=== interpolação de dados ===#  fonte: https://stackoverflow.com/questions/33137018/resample-function-in-octave
 
-      #freq_samp = .1;
-      #qde_amostras = (min(arquivo_dat(:,2)):1/freq_samp:max(arquivo_dat(:,2)))';
-##      resamp_qde_amostras = (min(arquivo_dat(:,1)):1/freq_samp:max(arquivo_dat(:,1)))';
-##      resamp = interp1(arquivo_dat(:,1), arquivo_dat(:,3), resamp_qde_amostras);
+      freq_samp = .1;
+      qde_amostras = (min(arquivo_dat(:,2)):1/freq_samp:max(arquivo_dat(:,2)))';
+      resamp_qde_amostras = (min(arquivo_dat(:,1)):1/freq_samp:max(arquivo_dat(:,1)))';
+      resamp = interp1(arquivo_dat(:,1), arquivo_dat(:,3), resamp_qde_amostras);
 ##      figure(3,"position",[500,500,1000,500]);
-##       plot(resamp_qde_amostras, resamp);
-            
-     ## filttro passa baixa
-##      n_filtro = 2; 
-##      freq_corte = 300; 
+##      plot(resamp_qde_amostras, resamp);
+##            
 
-     ## interpolação numero de pontos por ciclo 
-##      pontos_por_ciclo = 16;
-
-     ## estimação de fasores através do mmq
-##
+ ## filttro passa baixa # https://stackoverflow.com/questions/20141699/create-low-pass-filter-by-octave
+      
+      ordem_filtro = 1; 
+      freq_corte = 0.2; #valor entre 0 e 1
+      [b,a] = butter(ordem_filtro, 0.2);
+      filtered_data = filter(b,a,resamp);
+      figure(4,"position",[500,500,1000,500]);
+      plot(resamp_qde_amostras, filtered_data);
 
 ##======ALGORITMO DE PROTEÇÃO======##
 
