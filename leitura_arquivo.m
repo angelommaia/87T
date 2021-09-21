@@ -57,35 +57,31 @@ pkg load signal #para o resample
       legend(nome_variaveis{4},nome_variaveis{5},nome_variaveis{6}); #print ("-dpdf", 'plot.pdf');
       title (sprintf("Dados Originais do COMTRADE - Baixa do Trafo"));
       xlabel('Tempo(s)');ylabel('Corrente(A)');
+
+     ##===COMPONENTES HARMONICAS===##
   
-    ##===COMPONENTES HARMONICAS===##
+      sinal_teste = arquivo_dat(:,3);
       
-      freq_samp = 1/mean(diff(arquivo_dat(:,2)/10e5)); ##calculada com o intervalo de tempo utilizado
-      transformada_fourier = abs(fft(arquivo_dat(:,3))/size(arquivo_dat,1));
-      frequencias = (0:(size(arquivo_dat,1)-1))/length(size(arquivo_dat,1));
+      frequencia_de_amostragem = 1000;
+      Nyquist = frequencia_de_amostragem / 2;
+      
+      fourier = abs(fft(sinal_teste)/length(sinal_teste));
+      fourier_parametrizada = fourier/max(fourier)*100;
       figure()
-      bar(frequencias/60, transformada_fourier/max(transformada_fourier)*100)
-      xlim([0 7]);
-      
+      bar((0:length(sinal_teste)-1)*frequencia_de_amostragem/length(sinal_teste), fourier_parametrizada);
+     title("Componentes Harmonicas")
+      xlim([-1 9]);
 
-
-
-    
-
-    
+   
     ##=== interpolação de dados ===#  fonte: https://stackoverflow.com/questions/33137018/resample-function-in-octave
 
-      freq_samp = .1;
+      #freq_samp = .1;
       #qde_amostras = (min(arquivo_dat(:,2)):1/freq_samp:max(arquivo_dat(:,2)))';
 ##      resamp_qde_amostras = (min(arquivo_dat(:,1)):1/freq_samp:max(arquivo_dat(:,1)))';
 ##      resamp = interp1(arquivo_dat(:,1), arquivo_dat(:,3), resamp_qde_amostras);
 ##      figure(3,"position",[500,500,1000,500]);
 ##       plot(resamp_qde_amostras, resamp);
-       
-       
-       
-       
-       
+            
      ## filttro passa baixa
 ##      n_filtro = 2; 
 ##      freq_corte = 300; 
